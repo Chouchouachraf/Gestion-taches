@@ -1,71 +1,79 @@
 <?php
-// Inclure la connexion à la base de données
-require_once '../config/database.php';
+session_start();
 
-// Initialiser la connexion à la base de données
-$db = Database::getConnection();
+if (isset($_SESSION['user_id'])) {
+    header("Location: home.php");
+    exit;
+}
 
-// Vérification de la soumission du formulaire
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Récupérer les informations envoyées par le formulaire
-    $email = $_POST['email'] ?? ''; // Utilise $_POST['email']
-    $password = $_POST['password'] ?? ''; // Utilise $_POST['password']
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Database connection
+    require_once '../config/database.php';
 
-    // Vérifier si l'email et le mot de passe sont renseignés
-    if (!empty($email) && !empty($password)) {
-        // Préparer la requête pour vérifier si l'utilisateur existe dans la base de données
-        $stmt = $db->prepare("SELECT * FROM users WHERE email = :email");
-        $stmt->bindParam(':email', $email);
-        $stmt->execute();
+    $db = Database::getConnection(); // Get the PDO instance
 
-        // Vérifier si un utilisateur a été trouvé
-        if ($stmt->rowCount() > 0) {
-            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    $email = $_POST['email'];
+    $password = $_POST['password'];
 
-            // Vérifier si le mot de passe est correct
-            if (password_verify($password, $user['password'])) {
-                // Connecter l'utilisateur (enregistrer l'ID de l'utilisateur dans la session, par exemple)
-                session_start();
-                $_SESSION['user_id'] = $user['id'];
-                $_SESSION['username'] = $user['username'];
+    // Check user credentials
+    $query = "SELECT id, password FROM users WHERE email = ?";
+    $stmt = $db->prepare($query);
+    $stmt->execute([$email]);
 
-                // Rediriger vers la page d'accueil ou une autre page après la connexion
-                header("Location: index.php");
-                exit();
-            } else {
-                $error_message = "Identifiants invalides.";
-            }
-        } else {
-            $error_message = "Identifiants invalides.";
-        }
+    $user = $stmt->fetch();
+    if ($user && password_verify($password, $user['password'])) {
+        $_SESSION['user_id'] = $user['id'];
+        header("Location: home.php");
+        exit;
     } else {
-        $error_message = "Veuillez remplir tous les champs.";
+        $error = "Invalid credentials.";
     }
 }
 ?>
 
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Connexion</title>
-    <link rel="stylesheet" href="../assets/css/styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/style.css">
 </head>
-<body>
-    <h1>Se connecter</h1>
+<body class="bg-light">
 
-    <?php if (isset($error_message)): ?>
-        <div class="error"><?= $error_message ?></div>
-    <?php endif; ?>
+    <div class="container my-5">
+        <header class="text-center mb-4">
+            <h1>Login</h1>
+        </header>
 
-    <form action="login.php" method="POST">
-        <label for="email">Email :</label>
-        <input type="email" name="email" id="email" required><br>
+        <?php if (isset($error)) : ?>
+            <div class="alert alert-danger" role="alert">
+                <?= $error ?>
+            </div>
+        <?php endif; ?>
 
-        <label for="password">Mot de passe :</label>
-        <input type="password" name="password" id="password" required><br>
+        <form action="login.php" method="POST" class="bg-white p-4 rounded shadow-sm">
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" name="email" class="form-control" required>
+            </div>
 
-        <button type="submit">Se connecter</button>
-    </form>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" name="password" class="form-control" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Login</button>
+        </form>
+
+        <p class="text-center mt-3">Don't have an account? <a href="register.php">Sign Up</a></p>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+
 </body>
 </html>

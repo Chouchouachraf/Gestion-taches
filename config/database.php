@@ -1,31 +1,28 @@
 <?php
-// config/database.php
-
 class Database {
-    private static $host = 'localhost';
-    private static $dbname = 'personnel_tasks';
-    private static $username = 'root';  // Utilisateur de la base de données (ajustez si nécessaire)
-    private static $password = '';  // Mot de passe de l'utilisateur (ajustez si nécessaire)
-    private static $connection = null;
+    private static $conn;
 
-    // Méthode pour obtenir une connexion à la base de données
+    // Private constructor to prevent multiple instances
+    private function __construct() {}
+
+    // Method to get the database connection
     public static function getConnection() {
-        if (self::$connection === null) {
+        if (self::$conn === null) {
             try {
-                // Crée une nouvelle connexion à la base de données
-                self::$connection = new PDO(
-                    'mysql:host=' . self::$host . ';dbname=' . self::$dbname,
-                    self::$username,
-                    self::$password
-                );
-                // Définir le mode d'erreur PDO
-                self::$connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                $host = "localhost";
+                $dbname = "personnel_tasks"; // Change to your database name
+                $username = "root"; // Database username
+                $password = ""; // Database password, if any
+
+                // Create a new PDO connection
+                self::$conn = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
+                self::$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             } catch (PDOException $e) {
-                echo 'Connection failed: ' . $e->getMessage();
-                die();
+                die("Connection failed: " . $e->getMessage());
             }
         }
-        return self::$connection;
+
+        return self::$conn;
     }
 }
 ?>
