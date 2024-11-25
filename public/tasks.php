@@ -11,7 +11,8 @@ require_once '../config/database.php';
 $user_id = $_SESSION['user_id'];
 $db = Database::getConnection();  // Get the PDO instance using the Database class
 
-$query = "SELECT * FROM tasks WHERE user_id = ?";
+$query = "SELECT * FROM tasks WHERE user_id = ? ORDER BY FIELD(priority, 'high', 'medium', 'low'), due_date ASC";
+
 $stmt = $db->prepare($query);
 $stmt->execute([$user_id]);
 
@@ -52,27 +53,30 @@ $tasks = $stmt->fetchAll();
             <p>No tasks available. <a href="create_task.php">Add a new task!</a></p>
         <?php else : ?>
             <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>Title</th>
-                        <th>Status</th>
-                        <th>Due Date</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($tasks as $task) : ?>
-                        <tr>
-                            <td><?= htmlspecialchars($task['title']) ?></td>
-                            <td><?= htmlspecialchars(ucfirst($task['status'])) ?></td>
-                            <td><?= htmlspecialchars($task['due_date']) ?></td>
-                            <td>
-                                <a href="update_task.php?id=<?= $task['id'] ?>" class="btn btn-warning btn-sm">Edit</a>
-                                <a href="delete_task.php?id=<?= $task['id'] ?>" class="btn btn-danger btn-sm">Delete</a>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
+            <thead>
+    <tr>
+        <th>Title</th>
+        <th>Status</th>
+        <th>Due Date</th>
+        <th>Priority</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($tasks as $task) : ?>
+            <tr>
+                <td><?= htmlspecialchars($task['title']) ?></td>
+                <td><?= htmlspecialchars(ucfirst($task['status'])) ?></td>
+                <td><?= htmlspecialchars($task['due_date']) ?></td>
+                <td><?= htmlspecialchars(ucfirst($task['priority'])) ?></td>
+                <td>
+                    <a href="update_task.php?id=<?= $task['id'] ?>" class="btn btn-warning btn-sm">Edit</a>
+                    <a href="delete_task.php?id=<?= $task['id'] ?>" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+    </tbody>
+
             </table>
         <?php endif; ?>
     </div>

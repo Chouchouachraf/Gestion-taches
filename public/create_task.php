@@ -13,6 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $description = $_POST['description'];
     $status = $_POST['status'];
     $due_date = $_POST['due_date'];
+    $priority = $_POST['priority'] ?? 'low';  // Default to 'low' if not provided
 
     // Validate the form data (basic validation)
     if (empty($title) || empty($status)) {
@@ -21,9 +22,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Insert the new task into the database
         $db = Database::getConnection();  // Get the PDO instance using the Database class
 
-        $query = "INSERT INTO tasks (user_id, title, description, status, due_date) VALUES (?, ?, ?, ?, ?)";
+        $query = "INSERT INTO tasks (user_id, title, description, status, due_date,priority) VALUES (?, ?, ?, ?, ?,?)";
         $stmt = $db->prepare($query);  // Use $db instead of $pdo
-        $stmt->execute([$_SESSION['user_id'], $title, $description, $status, $due_date]);
+        $stmt->execute([$_SESSION['user_id'], $title, $description, $status, $due_date,$priority]);
         header("Location: tasks.php");
         exit();
     }
@@ -75,6 +76,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <option value="completed">Completed</option>
                 </select>
             </div>
+            <div class="mb-3">
+                <label for="priority" class="form-label">Priority</label>
+                <select name="priority" id="priority" class="form-select" required>
+                    <option value="low">Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
+                </select>
+            </div>
+
 
             <div class="mb-3">
                 <label for="due_date" class="form-label">Due Date</label>

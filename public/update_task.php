@@ -15,9 +15,10 @@ if (isset($_GET['id'])) {
     // Fetch task details
     $db = Database::getConnection();  // Get database connection
     $query = "SELECT * FROM tasks WHERE id = ? AND user_id = ?";
-    $stmt = $db->prepare($query);  // Use $db instead of $pdo
+    $stmt = $db->prepare($query);
     $stmt->execute([$task_id, $_SESSION['user_id']]);
     $task = $stmt->fetch();
+
 
     if (!$task) {
         echo "Error: Task not found or you do not have permission to edit it.";
@@ -30,11 +31,12 @@ if (isset($_GET['id'])) {
         $description = $_POST['description'];
         $status = $_POST['status'];
         $due_date = $_POST['due_date'];
+        $priority = $_POST['priority'];
 
         // Update the task in the database
-        $updateQuery = "UPDATE tasks SET title = ?, description = ?, status = ?, due_date = ? WHERE id = ?";
-        $updateStmt = $db->prepare($updateQuery);  // Use $db instead of $pdo
-        $updateStmt->execute([$title, $description, $status, $due_date, $task_id]);
+        $updateQuery = "UPDATE tasks SET title = ?, description = ?, status = ?, due_date = ?, priority = ? WHERE id = ?";
+        $updateStmt = $db->prepare($updateQuery);
+        $updateStmt->execute([$title, $description, $status, $due_date, $priority, $task_id]);
 
         header("Location: tasks.php");
         exit();
@@ -84,6 +86,16 @@ if (isset($_GET['id'])) {
                     <option value="completed" <?php if ($task['status'] == 'completed') echo 'selected'; ?>>Completed</option>
                 </select>
             </div>
+
+            <div class="mb-3">
+                <label for="priority" class="form-label">Priority</label>
+                <select name="priority" id="priority" class="form-select">
+                    <option value="low" <?php if ($task['priority'] == 'low') echo 'selected'; ?>>Low</option>
+                    <option value="medium" <?php if ($task['priority'] == 'medium') echo 'selected'; ?>>Medium</option>
+                    <option value="high" <?php if ($task['priority'] == 'high') echo 'selected'; ?>>High</option>
+                </select>
+            </div>
+
 
             <div class="mb-3">
                 <label for="due_date" class="form-label">Due Date</label>
