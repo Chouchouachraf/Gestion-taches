@@ -45,3 +45,12 @@ CREATE TABLE user_settings (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
+-- table subtasls
+CREATE TABLE subtasks (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    task_id INT NOT NULL, -- Lien avec la tâche principale
+    title VARCHAR(255) NOT NULL,
+    status ENUM('pending', 'in_progress', 'completed') DEFAULT 'pending',
+    FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE CASCADE
+);
+

@@ -12,7 +12,7 @@ class Database {
                 $host = "localhost";
                 $dbname = "personnel_tasks"; // Change to your database name
                 $username = "root"; // Database username
-                $password = ""; // Database password, if any
+                $password = "root"; // Database password, if any
 
                 // Create a new PDO connection
                 self::$conn = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
