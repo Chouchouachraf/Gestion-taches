@@ -53,4 +53,14 @@ CREATE TABLE subtasks (
     status ENUM('pending', 'in_progress', 'completed') DEFAULT 'pending',
     FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE CASCADE
 );
+CREATE TABLE user_settings (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    theme ENUM('light', 'dark') DEFAULT 'light',
+    view_mode ENUM('list', 'grid') DEFAULT 'list',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
 

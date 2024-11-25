@@ -1,4 +1,5 @@
 <?php
+include('header.php');
 // Démarrer la session
 session_start();
 
