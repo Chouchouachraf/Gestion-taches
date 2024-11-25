@@ -10,9 +10,9 @@ class Database {
         if (self::$conn === null) {
             try {
                 $host = "localhost";
-                $dbname = "personnel_tasks"; // Change to your database name
+                $dbname = "personnel_tasks"; 
                 $username = "root"; // Database username
-                $password = "root"; // Database password, if any
+                $password = ""; // Database password, if any
 
                 // Create a new PDO connection
                 self::$conn = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);

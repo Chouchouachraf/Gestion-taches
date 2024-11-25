@@ -41,6 +41,7 @@ $tasks = $stmt->fetchAll();
         <div class="mb-4">
             <a href="create_task.php" class="btn btn-primary">Add New Task</a>
             <a href="tasks.php" class="btn btn-secondary">View Tasks</a>
+            <a href="create_category.php" class="btn btn-info">Manage Categories</a> <!-- Nouveau bouton -->
         </div>
 
         <h2>Your Tasks</h2>
