@@ -52,8 +52,12 @@ $tasks = $stmt->fetchAll();
             <a href="create_task.php" class="btn btn-primary">Add New Task</a>
         </div>
 
-        <!-- Sort Options -->
+        
         <div class="d-flex justify-content-end mb-3">
+            <!-- View toggle button -->
+            <button id="toggle-view" class="btn btn-outline-primary me-3">Vue en cartes</button>
+
+            <!-- Sort dropdown -->
             <form method="get" action="" class="d-inline">
                 <select name="sort" class="form-select" style="width: auto;" onchange="this.form.submit()">
                     <option value="priority" <?= $sort === 'priority' ? 'selected' : '' ?>>Sort by Priority</option>
@@ -62,62 +66,80 @@ $tasks = $stmt->fetchAll();
             </form>
         </div>
 
+
         <!-- Display Tasks -->
         <?php if (empty($tasks)) : ?>
             <p>No tasks available. <a href="create_task.php">Add a new task!</a></p>
         <?php else : ?>
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>Title</th>
-                        <th>Status</th>
-                        <th>Due Date</th>
-                        <th>Priority</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($tasks as $task) : ?>
+            <!-- List View -->
+            <div id="list-view" style="display: block;">
+                <table class="table table-bordered">
+                    <thead>
                         <tr>
-                            <td><?= htmlspecialchars($task['title']) ?></td>
-                            <td><?= htmlspecialchars(ucfirst($task['status'])) ?></td>
-                            <td><?= htmlspecialchars($task['due_date']) ?></td>
-                            <td><?= htmlspecialchars(ucfirst($task['priority'])) ?></td>
-                            <td>
-                                <a href="update_task.php?id=<?= $task['id'] ?>" class="btn btn-warning btn-sm">Edit</a>
-                                <a href="delete_task.php?id=<?= $task['id'] ?>" class="btn btn-danger btn-sm">Delete</a>
-                            </td>
+                            <th>Title</th>
+                            <th>Status</th>
+                            <th>Due Date</th>
+                            <th>Priority</th>
+                            <th>Actions</th>
                         </tr>
-                        <?php
-                        // Récupérer les sous-tâches associées à cette tâche
-                        $query = "SELECT * FROM subtasks WHERE task_id = ?";
-                        $sub_stmt = $db->prepare($query);
-                        $sub_stmt->execute([$task['id']]);
-                        $subtasks = $sub_stmt->fetchAll();
-                        ?>
-                        <?php if (!empty($subtasks)) : ?>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($tasks as $task) : ?>
                             <tr>
-                                <td colspan="5">
-                                    <strong>Subtasks:</strong>
-                                    <ul>
-                                        <?php foreach ($subtasks as $subtask) : ?>
-                                            <li>
-                                                <?= htmlspecialchars($subtask['title']) ?> 
-                                                (<em><?= htmlspecialchars($subtask['status']) ?></em>)
-                                            </li>
-                                        <?php endforeach; ?>
-                                    </ul>
+                                <td><?= htmlspecialchars($task['title']) ?></td>
+                                <td><?= htmlspecialchars(ucfirst($task['status'])) ?></td>
+                                <td><?= htmlspecialchars($task['due_date']) ?></td>
+                                <td><?= htmlspecialchars(ucfirst($task['priority'])) ?></td>
+                                <td>
+                                    <a href="update_task.php?id=<?= $task['id'] ?>" class="btn btn-warning btn-sm">Edit</a>
+                                    <a href="delete_task.php?id=<?= $task['id'] ?>" class="btn btn-danger btn-sm">Delete</a>
                                 </td>
                             </tr>
-                        <?php endif; ?>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Card View -->
+            <div id="card-view" style="display: none; flex-wrap: wrap;">
+                <?php foreach ($tasks as $task) : ?>
+                    <div class="card m-2" style="width: 18rem;">
+                        <div class="card-body">
+                            <h5 class="card-title"><?= htmlspecialchars($task['title']) ?></h5>
+                            <p class="card-text"><strong>Status:</strong> <?= htmlspecialchars(ucfirst($task['status'])) ?></p>
+                            <p class="card-text"><strong>Due Date:</strong> <?= htmlspecialchars($task['due_date']) ?></p>
+                            <p class="card-text"><strong>Priority:</strong> <?= htmlspecialchars(ucfirst($task['priority'])) ?></p>
+                            <a href="update_task.php?id=<?= $task['id'] ?>" class="btn btn-warning btn-sm">Edit</a>
+                            <a href="delete_task.php?id=<?= $task['id'] ?>" class="btn btn-danger btn-sm">Delete</a>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
         <?php endif; ?>
     </div>
 
     <!-- Bootstrap JS and dependencies -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+    <!-- handdel toggel view  -->
+    <script>
+    document.getElementById('toggle-view').addEventListener('click', function () {
+        const listView = document.getElementById('list-view');
+        const cardView = document.getElementById('card-view');
+        const toggleButton = this;
+
+        if (listView.style.display === 'none') {
+            listView.style.display = 'block';
+            cardView.style.display = 'none';
+            toggleButton.textContent = 'Vue en cartes';
+        } else {
+            listView.style.display = 'none';
+            cardView.style.display = 'flex';
+            toggleButton.textContent = 'Vue en liste';
+        }
+    });
+    </script>
+
+
 </body>
 </html>
