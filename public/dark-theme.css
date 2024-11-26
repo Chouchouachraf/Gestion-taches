@@ -1,10 +1,12 @@
-/* Couleurs principales pour le thème sombre */
+
+
+/* Dark Mode Overrides */
 body.dark-theme {
-    background-color: #121212;
-    color: #ffffff;
+    background-color: #121212; /* Dark background */
+    color: #ffffff; /* White text */
 }
 
-/* En-têtes */
+/* Headings */
 body.dark-theme h1, 
 body.dark-theme h2, 
 body.dark-theme h3, 
@@ -14,74 +16,74 @@ body.dark-theme h6 {
     color: #ffffff;
 }
 
-/* Liens */
+/* Links */
 body.dark-theme a {
-    color: #1e90ff;
+    color: #66b2ff; /* Lighter blue */
     text-decoration: none;
 }
 
 body.dark-theme a:hover {
-    color: #63a4ff;
+    color: #99ccff; /* Softer hover color */
     text-decoration: underline;
 }
 
-/* Boutons */
+/* Buttons */
 body.dark-theme .btn {
-    background-color: #1e1e1e;
-    color: #ffffff;
-    border: 1px solid #555;
+    background-color: #78c6f095; /* Darker button background */
+    color: #ffffff; /* White text */
+    border: 1px solid #444; /* Light border */
 }
 
 body.dark-theme .btn:hover {
-    background-color: #333333;
-    color: #ffffff;
+    background-color: #4b9ef79a; /* Slightly lighter on hover */
+    border-color: #666; /* Slightly lighter border on hover */
 }
 
-/* Formulaires */
+/* Forms */
 body.dark-theme input,
 body.dark-theme select,
 body.dark-theme textarea {
-    background-color: #2c2c2c;
-    color: #ffffff;
-    border: 1px solid #555;
+    background-color: #222; /* Dark input backgrounds */
+    color: #ffffff; /* White text */
+    border: 1px solid #444; /* Light border */
 }
 
 body.dark-theme input::placeholder,
 body.dark-theme textarea::placeholder {
-    color: #888;
+    color: #888; /* Lighter placeholder text */
 }
 
 /* Tables */
 body.dark-theme table {
-    background-color: #1e1e1e;
-    color: #ffffff;
+    background-color: #181818; /* Dark background for tables */
+    color: #ffffff; /* White text */
     border-collapse: collapse;
     width: 100%;
 }
 
 body.dark-theme table th, 
 body.dark-theme table td {
-    border: 1px solid #555;
+    border: 1px solid #444; /* Light border */
     padding: 8px;
     text-align: left;
 }
 
 body.dark-theme table th {
-    background-color: #333333;
+    background-color: #333; /* Dark header background */
     color: #ffffff;
 }
 
 body.dark-theme table tr:nth-child(even) {
-    background-color: #2c2c2c;
+    background-color: #2a2a2a; /* Slightly lighter row color */
 }
 
 body.dark-theme table tr:hover {
-    background-color: #444444;
+    background-color: #333; /* Highlight row on hover */
 }
 
 /* Navbar */
 body.dark-theme .navbar {
-    background-color: #1e1e1e;
+    background-color: #181818; /* Dark navbar */
     color: #ffffff;
 }
 
@@ -90,71 +92,71 @@ body.dark-theme .navbar a {
 }
 
 body.dark-theme .navbar a:hover {
-    color: #63a4ff;
+    color: #66b2ff; /* Lighter hover color */
 }
 
-/* Cartes et conteneurs */
+/* Cards */
 body.dark-theme .card {
-    background-color: #1e1e1e;
-    color: #ffffff;
-    border: 1px solid #555;
+    background-color: #181818; /* Dark card background */
+    color: #ffffff; /* White text */
+    border: 1px solid #444; /* Light border */
 }
 
 body.dark-theme .card-header {
-    background-color: #333333;
+    background-color: #333; /* Dark header background */
     color: #ffffff;
 }
 
-/* Alertes */
+/* Alerts */
 body.dark-theme .alert {
-    background-color: #2c2c2c;
-    color: #ffffff;
-    border: 1px solid #555;
+    background-color: #2a2a2a; /* Slightly lighter alert background */
+    color: #ffffff; /* White text */
+    border: 1px solid #444; /* Light border */
 }
 
 body.dark-theme .alert-danger {
-    background-color: #5b1d1d;
-    color: #ffcccc;
+    background-color: #7a2c2c; /* Dark red for danger */
+    color: #ffdddd; /* Light red text */
 }
 
 body.dark-theme .alert-success {
-    background-color: #1d5b1d;
-    color: #ccffcc;
+    background-color: #2c7a2c; /* Dark green for success */
+    color: #ddffdd; /* Light green text */
 }
 
 body.dark-theme .alert-warning {
-    background-color: #5b4b1d;
-    color: #ffe4a1;
+    background-color: #7a6a2c; /* Dark yellow for warning */
+    color: #fff2cc; /* Light yellow text */
 }
 
 /* Pagination */
 body.dark-theme .pagination .page-link {
-    background-color: #2c2c2c;
-    color: #ffffff;
-    border: 1px solid #555;
+    background-color: #222; /* Dark background for pagination */
+    color: #ffffff; /* White text */
+    border: 1px solid #444; /* Light border */
 }
 
 body.dark-theme .pagination .page-link:hover {
-    background-color: #444444;
+    background-color: #333; /* Highlight page on hover */
 }
 
-/* Pied de page */
+/* Footer */
 body.dark-theme footer {
-    background-color: #1e1e1e;
-    color: #ffffff;
+    background-color: #181818; /* Dark footer */
+    color: #ffffff; /* White text */
     padding: 20px;
     text-align: center;
 }
 
-/* Divers */
+/* Misc */
 body.dark-theme hr {
-    border: 1px solid #444;
+    border: 1px solid #444; /* Light border for dividers */
 }
 
 body.dark-theme .border {
-    border-color: #555;
+    border-color: #444; /* Light border */
 }
 
 body.dark-theme .shadow {
-    box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1);
+    box-shadow: 0 2px 6px rgba(255, 255, 255, 0.08); /* Subtle shadow */
 }
