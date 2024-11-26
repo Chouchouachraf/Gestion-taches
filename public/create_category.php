@@ -1,5 +1,5 @@
 <?php
-
+include('header.php');
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit;
@@ -12,36 +12,40 @@ $db = Database::getConnection();
 
 // Handle form submission for adding a new category
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
-    if ($_POST['action'] === 'add') {
-        // Add new category
-        $category_name = trim($_POST['category_name']);
-        if (!empty($category_name)) {
-            $query = "INSERT INTO categories (user_id, name) VALUES (?, ?)";
+    try {
+        if ($_POST['action'] === 'add') {
+            // Add new category
+            $category_name = trim($_POST['category_name']);
+            if (!empty($category_name)) {
+                $query = "INSERT INTO categories (user_id, name) VALUES (?, ?)";
+                $stmt = $db->prepare($query);
+                $stmt->execute([$user_id, $category_name]);
+                $success_message = "Category added successfully!";
+            } else {
+                $error_message = "Category name cannot be empty.";
+            }
+        } elseif ($_POST['action'] === 'edit') {
+            // Edit existing category
+            $category_id = $_POST['category_id'];
+            $new_name = trim($_POST['new_name']);
+            if (!empty($new_name)) {
+                $query = "UPDATE categories SET name = ? WHERE id = ? AND user_id = ?";
+                $stmt = $db->prepare($query);
+                $stmt->execute([$new_name, $category_id, $user_id]);
+                $success_message = "Category updated successfully!";
+            } else {
+                $error_message = "Category name cannot be empty.";
+            }
+        } elseif ($_POST['action'] === 'delete') {
+            // Delete category
+            $category_id = $_POST['category_id'];
+            $query = "DELETE FROM categories WHERE id = ? AND user_id = ?";
             $stmt = $db->prepare($query);
-            $stmt->execute([$user_id, $category_name]);
-            $success_message = "Category added successfully!";
-        } else {
-            $error_message = "Category name cannot be empty.";
+            $stmt->execute([$category_id, $user_id]);
+            $success_message = "Category deleted successfully!";
         }
-    } elseif ($_POST['action'] === 'edit') {
-        // Edit existing category
-        $category_id = $_POST['category_id'];
-        $new_name = trim($_POST['new_name']);
-        if (!empty($new_name)) {
-            $query = "UPDATE categories SET name = ? WHERE id = ? AND user_id = ?";
-            $stmt = $db->prepare($query);
-            $stmt->execute([$new_name, $category_id, $user_id]);
-            $success_message = "Category updated successfully!";
-        } else {
-            $error_message = "Category name cannot be empty.";
-        }
-    } elseif ($_POST['action'] === 'delete') {
-        // Delete category
-        $category_id = $_POST['category_id'];
-        $query = "DELETE FROM categories WHERE id = ? AND user_id = ?";
-        $stmt = $db->prepare($query);
-        $stmt->execute([$category_id, $user_id]);
-        $success_message = "Category deleted successfully!";
+    } catch (PDOException $e) {
+        $error_message = "Database error: " . $e->getMessage();
     }
 }
 
@@ -66,7 +70,6 @@ $categories = $stmt->fetchAll();
         <header class="mb-4">
             <h1 class="text-center">Manage Categories</h1>
             <div class="d-flex justify-content-end">
-                <!-- Button to return to the home page -->
                 <a href="home.php" class="btn btn-secondary">Home</a>
                 <a href="logout.php" class="btn btn-danger ms-2">Logout</a>
             </div>
@@ -114,8 +117,8 @@ $categories = $stmt->fetchAll();
                                     <button type="submit" class="btn btn-warning btn-sm">Edit</button>
                                 </form>
 
-                                <!-- Delete Form -->
-                                <form method="POST" action="" class="d-inline ms-2">
+                                <!-- Delete Form with Confirmation -->
+                                <form method="POST" action="" class="d-inline ms-2" onsubmit="return confirm('Are you sure you want to delete this category?');">
                                     <input type="hidden" name="action" value="delete">
                                     <input type="hidden" name="category_id" value="<?= $category['id'] ?>">
                                     <button type="submit" class="btn btn-danger btn-sm">Delete</button>

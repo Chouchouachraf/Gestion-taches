@@ -1,4 +1,5 @@
 <?php
+include('header.php');
 // Connexion à la base de données
 $dsn = 'mysql:host=localhost;dbname=gestion_taches;charset=utf8';
 $username = 'root';

@@ -1,4 +1,5 @@
 <?php
+include('header.php');
 require('../fpdf/fpdf.php');
 session_start();
 

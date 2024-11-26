@@ -1,88 +1,67 @@
 <?php
+// Start the session at the beginning of the page
 session_start();
-require_once '../config/database.php'; // Votre fichier de configuration de base de données
 
-if (isset($_SESSION['user_id'])) {
-    $user_id = $_SESSION['user_id'];
-
-    // Connexion à la base de données
-    $db = Database::getConnection();
-
-    // Vérifier si une préférence de thème existe pour cet utilisateur
-    $stmt = $db->prepare("SELECT theme FROM user_settings WHERE user_id = ?");
-    $stmt->execute([$user_id]);
-    $user_setting = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    // Si aucune préférence n'est définie, on initialise à "light"
-    $theme = ($user_setting && isset($user_setting['theme'])) ? $user_setting['theme'] : 'light';
-
-    // Appliquer le thème dans la session
-    $_SESSION['theme'] = $theme;
-} else {
-    // Si l'utilisateur n'est pas connecté, appliquer le thème par défaut "light"
-    $_SESSION['theme'] = 'light';
+// Check if the theme is already set in the session
+if (isset($_POST['theme'])) {
+    $_SESSION['theme'] = $_POST['theme'];
 }
 
-// Charger la classe CSS appropriée en fonction du thème
-$theme_class = ($_SESSION['theme'] === 'dark') ? 'dark-theme' : 'light-theme';
+// Set default theme if not set
+if (!isset($_SESSION['theme'])) {
+    $_SESSION['theme'] = 'light'; // Default theme
+}
 ?>
-
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestion des Tâches</title>
-    <!-- Liens vers les fichiers Bootstrap CSS et les thèmes -->
+    <title>Your Page Title</title>
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="./light-theme.css"> 
-    <link rel="stylesheet" href="./dark-theme.css"> 
+    <link rel="stylesheet" href="light-theme.css"> 
+    <link rel="stylesheet" href="dark-theme.css">
+    <!-- Custom Theme CSS -->
+    <link id="theme-style" href="<?php echo $_SESSION['theme'] == 'dark' ? 'dark-theme.css' : 'light-theme.css'; ?>" rel="stylesheet">
 </head>
-<body class="<?= $theme_class ?>"> <!-- Appliquer la classe CSS pour le thème -->
+<body class="<?= $_SESSION['theme'] == 'dark' ? 'dark-theme' : 'light-theme' ?>">
 
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center">
-        <h1 class="text-center">Gestion des Tâches</h1>
-        <div>
-            <!-- Bouton pour basculer entre les thèmes -->
-            <button id="theme-toggle" class="btn btn-primary">
-                <?= ($_SESSION['theme'] === 'dark') ? 'Basculer vers Clair' : 'Basculer vers Sombre' ?>
-            </button>
-        </div>
-    </div>
-</div>
-
+<!-- Theme Toggle Button -->
+<button id="theme-toggle" class="btn btn-primary">
+    <?= ($_SESSION['theme'] == 'dark') ? 'Switch to Light Mode' : 'Switch to Dark Mode' ?>
+</button>
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
         const themeToggleButton = document.querySelector("#theme-toggle");
 
-        themeToggleButton.addEventListener("click", function() {
-            // Détecter l'état actuel du thème
+        // Detect the current theme
+        themeToggleButton.addEventListener("click", function () {
             const currentTheme = document.body.classList.contains("dark-theme") ? "dark" : "light";
             const newTheme = (currentTheme === "dark") ? "light" : "dark";
 
-            // Basculer entre les classes de thème
+            // Toggle the body class for the theme
             document.body.classList.toggle("dark-theme", newTheme === "dark");
             document.body.classList.toggle("light-theme", newTheme === "light");
 
-            // Changer le texte du bouton
-            themeToggleButton.textContent = (newTheme === "dark") ? "Basculer vers Clair" : "Basculer vers Sombre";
+            // Update the button text
+            themeToggleButton.textContent = (newTheme === "dark") ? "Switch to Light Mode" : "Switch to Dark Mode";
 
-            // Envoyer la nouvelle préférence de thème au serveur via AJAX
+            // Send the theme change to the server using fetch (AJAX) to update the session
             fetch("update_theme.php", {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json",
+                    "Content-Type": "application/json"
                 },
                 body: JSON.stringify({ theme: newTheme })
             }).then(response => {
                 if (!response.ok) {
-                    console.error("Erreur lors de la mise à jour du thème.");
+                    console.error("Error updating theme.");
                 }
             });
         });
     });
 </script>
-
 </body>
 </html>
+<!-- Your content here -->

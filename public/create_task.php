@@ -59,7 +59,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <header class="text-center mb-4">
         <h1>Create New Task</h1>
     </header>
-
     <div class="mb-4">
         <a href="tasks.php" class="btn btn-secondary">Back to Tasks</a>
     </div>
