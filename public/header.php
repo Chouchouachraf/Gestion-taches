@@ -1,14 +1,13 @@
 <?php
 session_start();
-require_once 'config/database.php'; // Votre fichier de configuration de base de données
+require_once '../config/database.php';
 
-// Vérifier si l'utilisateur est connecté
 if (isset($_SESSION['user_id'])) {
     $user_id = $_SESSION['user_id'];
 
     // Connexion à la base de données
     $db = Database::getConnection();
-    
+
     // Vérifier si une préférence de thème existe pour cet utilisateur
     $stmt = $db->prepare("SELECT theme FROM user_settings WHERE user_id = ?");
     $stmt->execute([$user_id]);
@@ -36,28 +35,26 @@ $theme_class = ($_SESSION['theme'] === 'dark') ? 'dark-theme' : 'light-theme';
     <title>Gestion des Tâches</title>
     <!-- Liens vers les fichiers Bootstrap CSS et les thèmes -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/light-theme.css">  <!-- Style pour le thème clair -->
-    <link rel="stylesheet" href="css/dark-theme.css">   <!-- Style pour le thème sombre -->
+    <link rel="stylesheet" href="./light-theme.css"> 
+    <link rel="stylesheet" href="./dark-theme.css"> 
 </head>
 <body class="<?= $theme_class ?>"> <!-- Appliquer la classe CSS pour le thème -->
 
-<!-- NavBar et autres éléments du header -->
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center">
         <h1 class="text-center">Gestion des Tâches</h1>
         <div>
             <!-- Bouton pour basculer entre les thèmes -->
-            <button class="btn btn-primary theme-toggle">
+            <button id="theme-toggle" class="btn btn-primary">
                 <?= ($_SESSION['theme'] === 'dark') ? 'Basculer vers Clair' : 'Basculer vers Sombre' ?>
             </button>
         </div>
     </div>
 </div>
 
-<!-- Ajouter le script JavaScript pour le changement de thème -->
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        const themeToggleButton = document.querySelector(".theme-toggle");
+        const themeToggleButton = document.querySelector("#theme-toggle");
 
         themeToggleButton.addEventListener("click", function() {
             // Détecter l'état actuel du thème
