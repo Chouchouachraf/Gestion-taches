@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once '../config/database.php'; // Votre fichier de configuration de base de données
 
 if (isset($_SESSION['user_id'])) {
