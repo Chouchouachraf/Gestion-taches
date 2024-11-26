@@ -1,4 +1,5 @@
 <?php
+include('header.php');
 // Include the Database class for the connection
 require_once '../config/database.php';
 
