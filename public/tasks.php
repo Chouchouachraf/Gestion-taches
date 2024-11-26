@@ -53,18 +53,22 @@ $tasks = $stmt->fetchAll();
         </div>
 
         
-        <div class="d-flex justify-content-end mb-3">
-            <!-- View toggle button -->
-            <button id="toggle-view" class="btn btn-outline-primary me-3">Vue en cartes</button>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <!-- View toggle button -->
+                <button id="toggle-view" class="btn btn-outline-primary">Vue en cartes</button>
 
-            <!-- Sort dropdown -->
-            <form method="get" action="" class="d-inline">
-                <select name="sort" class="form-select" style="width: auto;" onchange="this.form.submit()">
-                    <option value="priority" <?= $sort === 'priority' ? 'selected' : '' ?>>Sort by Priority</option>
-                    <option value="due_date" <?= $sort === 'due_date' ? 'selected' : '' ?>>Sort by Due Date</option>
-                </select>
-            </form>
-        </div>
+                <!-- Sort dropdown and Export PDF button -->
+                <div class="d-flex align-items-center">
+                    <form method="get" action="" class="d-inline me-2">
+                        <select name="sort" class="form-select" style="width: auto;" onchange="this.form.submit()">
+                            <option value="priority" <?= $sort === 'priority' ? 'selected' : '' ?>>Sort by Priority</option>
+                            <option value="due_date" <?= $sort === 'due_date' ? 'selected' : '' ?>>Sort by Due Date</option>
+                        </select>
+                    </form>
+                    <a href="export_tasks_pdf.php" class="btn btn-info">Export as PDF</a>
+                </div>
+            </div>
+
 
 
         <!-- Display Tasks -->
