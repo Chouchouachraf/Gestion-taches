@@ -1,32 +1,32 @@
-name: Continuous Integration
+name: CI
 
 on:
   push:
     branches:
       - main
-      - dev
   pull_request:
     branches:
       - main
-      - dev
 
 jobs:
-  build:
+  php:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      # Checkout the repository
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up PHP (>= 8.2)
+      # Set up PHP 8.2
+      - name: Set up PHP 8.2
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
 
+      # Install Composer dependencies
       - name: Install dependencies
-        run: |
-          composer install --no-dev --no-scripts --prefer-dist
+        run: composer install --no-interaction
 
-      - name: Run tests
-        run: |
-          vendor/bin/phpunit --configuration phpunit.xml
+      # Run PHPUnit tests
+      - name: Run PHPUnit tests
+        run: vendor/bin/phpunit --configuration phpunit.xml
