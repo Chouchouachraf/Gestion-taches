@@ -11,6 +11,7 @@ Thumbs.db
 
 # Composer dependencies
 /vendor/
+/fpdf/
 
 # FPDF directory (bc it's included manually)
 libs/fpdf/
