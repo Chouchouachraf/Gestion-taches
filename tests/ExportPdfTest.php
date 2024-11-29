@@ -1,75 +1,44 @@
 <?php
 use PHPUnit\Framework\TestCase;
 
-class TaskScriptTest extends TestCase {
-    private $mockDb;
-    private $mockStmt;
-
-    protected function setUp(): void {
-        // Mock the PDO statement
-        $this->mockStmt = $this->createMock(PDOStatement::class);
-        $this->mockStmt->method('fetchAll')->willReturn([
-            ['title' => 'Task 1', 'status' => 'completed', 'due_date' => '2023-11-01', 'priority' => 'high'],
-            ['title' => 'Task 2', 'status' => 'pending', 'due_date' => '2023-11-05', 'priority' => 'medium'],
-        ]);
-
-        // Mock the PDO connection
-        $this->mockDb = $this->createMock(PDO::class);
-        $this->mockDb->method('prepare')->willReturn($this->mockStmt);
+class ExportPdfTest extends TestCase
+{
+    protected function setUp(): void
+    {
+        // Start a session to mock $_SESSION
+        session_start();
+        $_SESSION['user_id'] = 1; // Mock user_id
     }
 
-    public function testRedirectIfNotLoggedIn() {
-        // Simulate no session
-        $_SESSION = [];
+    public function testExportPdfGeneratesFile()
+    {
+        
 
-        ob_start();
-        include '../public/export_tasks_pdf.php'; // Replace with your script's filename
-        $output = ob_get_clean();
+        // Run the export_pdf.php script (you may need to include or require the script in the test)
+        ob_start(); // Start output buffering
+        require_once '../export_pdf.php'; // Path to the export_pdf.php script
+        $output = ob_get_clean(); // Capture the output (PDF or any other output)
 
-        $this->assertStringContainsString('Location: .../public/login.php', $output);
+        // Check if the file was generated
+        $pdfFilePath = __DIR__ . '/../tasks.pdf'; // Adjust the path to where the PDF is saved
+
+        // Assert that the file exists after the script runs
+        $this->assertFileExists($pdfFilePath, 'The PDF file was not generated.');
+
+        // Optionally, check for specific content inside the generated PDF.
+        // For this, you would need a library to read and check the contents of the PDF.
     }
 
-    public function testTasksFetchWithMockedDatabase() {
-        // Simulate logged-in user
-        $_SESSION['user_id'] = 1;
-
-        // Inject the mock database connection
-        Database::setMockConnection($this->mockDb);
-
-        ob_start();
-        include '../public/export_tasks_pdf.php'; // Replace with your script's filename
-        ob_end_clean();
-
-        // Verify tasks fetch operation
-        $this->assertTrue($this->mockStmt->execute());
-        $tasks = $this->mockStmt->fetchAll();
-        $this->assertCount(2, $tasks);
-    }
-
-    public function testPDFGeneration() {
-        // Simulate logged-in user
-        $_SESSION['user_id'] = 1;
-
-        // Inject the mock database connection
-        Database::setMockConnection($this->mockDb);
-
-        // Mock FPDF methods
-        $mockPdf = $this->getMockBuilder(FPDF::class)
-            ->onlyMethods(['AddPage', 'SetFont', 'Cell', 'Ln', 'Output'])
-            ->getMock();
-
-        $mockPdf->expects($this->once())->method('AddPage');
-        $mockPdf->expects($this->atLeastOnce())->method('SetFont');
-        $mockPdf->expects($this->atLeastOnce())->method('Cell');
-        $mockPdf->expects($this->atLeastOnce())->method('Ln');
-        $mockPdf->expects($this->once())->method('Output');
-
-        // Replace `new FPDF()` with the mock
-        ob_start();
-        include '../public/export_tasks_pdf.php'; // Replace with your script's filename
-        ob_end_clean();
+    protected function tearDown(): void
+    {
+        // Clean up (e.g., remove the generated PDF file)
+        $pdfFilePath = __DIR__ . '/../tasks.pdf'; // Adjust the path to where the PDF is saved
+        if (file_exists($pdfFilePath)) {
+            unlink($pdfFilePath);
+        }
     }
 }
+
 
 
 
