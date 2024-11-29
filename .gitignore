@@ -1,0 +1,20 @@
+# General system files
+*.log
+*.cache
+*.bak
+*.swp
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+.env
+
+# Composer dependencies
+/vendor/
+
+# FPDF directory (bc it's included manually)
+libs/fpdf/
+
+# Cache and temporary files
+/tmp/
+cache/
