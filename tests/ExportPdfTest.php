@@ -16,7 +16,7 @@ class ExportPdfTest extends TestCase
 
         // Run the export_pdf.php script (you may need to include or require the script in the test)
         ob_start(); // Start output buffering
-        require_once '../export_pdf.php'; // Path to the export_pdf.php script
+        require_once '../public/export_tasks_pdf.php'; // Path to the export_pdf.php script
         $output = ob_get_clean(); // Capture the output (PDF or any other output)
 
         // Check if the file was generated
