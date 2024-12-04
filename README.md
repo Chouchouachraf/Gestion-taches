@@ -1,5 +1,5 @@
 # 🔰 Gestion-Taches
-A task management system built with PHP, designed for efficient organization and execution of tasks., built with PHP and MySQL.
+A task management system designed for efficient organization and execution of tasks, built with PHP and MySQL.
 
 ## 🌟 User Features
 
@@ -56,17 +56,26 @@ If the fpdf folder is missing or the library needs to be updated:
 6. Start your web server
 
 ## 📱 Screenshots
-
+$ LOG IN
 ![alt text](./images/screnn1.png)
+$ CREATE ACCOUNT
 ![alt text](./images/screnn2.png)
+$ HOME PAGE
 ![alt text](./images/screnn3.png)
+$ CREATE NEW TASK
 ![alt text](./images/screnn4.png)
+$ TASKS PAGE: FILTER BY...
 ![alt text](./images/screnn5.png)
 ![alt text](./images/screnn6.png)
+$ TASKS PAGE : VIEW TYPE
 ![alt text](./images/screnn7.png)
+$ EXPORT TASK AS PDF
 ![alt text](./images/screnn8.png)
+$ UPDATE TASK :
 ![alt text](./images/screnn9.png)
+$ CATEGORIES :
 ![alt text](./images/screnn10.png)
+$ DARK THEME
 ![alt text](./images/screnn11.png)
 
 ## 🔒 Security Features
@@ -121,10 +130,6 @@ If the fpdf folder is missing or the library needs to be updated:
 ## 🤝 Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 👨‍💻 Author
 
